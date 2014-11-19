@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>test autocomplete</title>
+	<script type="text/javascript" src="CleverMatcher.js"></script>
+	<script type="text/javascript" src="completionAug.js"></script>
+	<style type="text/css">
+		.autocompletion_drop{
+			position: absolute;
+			pointer-events:none;
+			margin-left: -10px;
+			-webkit-transition: all 230ms;
+			-moz-transition: all 230ms;
+			-ms-transition: all 230ms;
+			transition: all 230ms;
+			border-radius: 3px;
+			font-size: 19px;
+			opacity: 0;
+			background-color: rgba(0,0,0, 0.9);
+		}
+		.autocompletion_drop.visible{
+			margin-left: 0px;
+			opacity: 1;
+		}
+		.match{
+			font-family: monospace;
+			background-color: rgb(0,0,0);
+			margin-bottom: 4px;
+			padding-left: 3px;
+			padding-right: 3px;
+			color: rgb(178,178,178);
+		}
+		*.match + *.match {
+			color: rgb(178,178,178);
+			background-color: rgba(0,0,0, 0.3);
+		}
+		.subsequence_matching{
+			font-weight: 800;
+			color: white;
+		}
+	</style>
+	<script type="text/javascript">
+		window.addEventListener('DOMContentLoaded', function(){
+			var ac = attach_autocompletion(
+				document.getElementById('input'),
+				['Binding Lantern Smith', 'Hopeful Woods', 'blustery_green', 'Holy Sword']
+			);
+		});
+	</script>
+</head>
+<body>
+	<input id="input">
+</body>
+</html>
