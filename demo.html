@@ -5,14 +5,15 @@
 	<script type="text/javascript" src="CleverMatcher.js"></script>
 	<script type="text/javascript" src="completionAug.js"></script>
 	<style type="text/css">
+		/*autocomplete-specific stuff:*/
 		.autocompletion_drop{
 			position: absolute;
 			pointer-events:none;
 			margin-left: -10px;
-			-webkit-transition: all 230ms;
-			-moz-transition: all 230ms;
-			-ms-transition: all 230ms;
-			transition: all 230ms;
+			-webkit-transition: all 230ms ease-out;
+			-moz-transition: all 230ms ease-out;
+			-ms-transition: all 230ms ease-out;
+			transition: all 230ms ease-out;
 			border-radius: 3px;
 			font-size: 19px;
 			opacity: 0;
@@ -38,17 +39,53 @@
 			font-weight: 800;
 			color: white;
 		}
+		
+		/*page stuff:*/
+		body{ font-family: sans-serif; }
+		.result{ margin-left: 25px; }
+		input{
+			border-radius: 4px;
+			border: none;
+			background-color: rgb(245,245,245);
+		}
+		#in_box{
+			display: inline-block;
+			border-radius: 14px;
+			padding: 13px;
+			background-color: rgb(230 ,230,230);
+		}
+		#in_box_title{
+			font-size: 10px;
+		}
+		
 	</style>
 	<script type="text/javascript">
 		window.addEventListener('DOMContentLoaded', function(){
-			var ac = attach_autocompletion(
-				document.getElementById('input'),
-				['Binding Lantern Smith', 'Hopeful Woods', 'blustery_green', 'Holy Sword']
+			var inputElement = document.getElementById('input');
+			var inBox = document.getElementById('in_box');
+			inputElement.focus();
+			var resultList =  ['BindingLantern Smith', 'Hopeful Woods', 'blustery_green', 'Holy Sword', 'LoathsomeForge', 'Empty_parrot', 'GoldenHorn', 'Open Hail', 'aside the mail', 'versitility', 'version', 'document32', 'orson snot lard', 'green-temple', 'Vital Breath', 'Empty Breath'];
+			resultList.forEach(function(te){
+				var noteel = document.createElement('div');
+				noteel.classList.add('in_box_item');
+				noteel.textContent = te;
+				inBox.appendChild(noteel);
+			});
+			var ac = attachAutocompletion(
+				inputElement,
+				resultList,
+				function(key){
+					var noteel = document.createElement('span');
+					noteel.classList.add('result');
+					noteel.textContent = 'item #'+(key+1)+' was selected.';
+					document.body.appendChild(noteel);
+				}
 			);
 		});
 	</script>
 </head>
 <body>
+	<div id="in_box"><div id="in_box_title">from among</div></div>
 	<input id="input">
 </body>
 </html>
