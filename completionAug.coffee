@@ -5,11 +5,11 @@ arrayRemoveElement = (ar, el)->
 	i = ar.indexOf el
 	if i >= 0
 		ar.splice(i,1)
-#no IE 8
 elBounds = (el)->
 	eb = el.getBoundingClientRect()
 	x: eb.left - document.body.scrollLeft
 	y: eb.top - document.body.scrollTop
+	#no IE8
 	w: eb.width
 	h: eb.height
 
@@ -56,6 +56,8 @@ class @Autocompletion
 		@input.removeEventListener 'keydown', @keydown
 		@input = null
 	
+	setMatchset:(@matchset)->
+	
 	pushToDrop: (resultList)->
 		@currentResultList = resultList
 		#resize display
@@ -98,10 +100,10 @@ class @Autocompletion
 		switch ev.keyCode
 			when 13 #return
 				if @currentResultList.length > 0
-					#hum. Assigning to input.value seems to prevent input's change event from firing in chrome. I shall have to forgo using the change event.
+					#hum. Assigning to input.value seems to prevent input's change event from firing in chrome. I shall have to forgo using the change event to catch selections.
 					@input.value = @currentResultList[0].text
 					@fireFiringListeners @currentResultList[0].key
 			when 27 #escape
 				@collapse()
 			# when 9 #tab
-				#cycle through alternatives?
+				#cycle through alternatives? Maybe not. Users might expect this, just as they might expect to be able to click on the search result they want. Both of these expectations show a lack of appreciation of the modus operandi.
