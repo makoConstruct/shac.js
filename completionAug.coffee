@@ -6,20 +6,26 @@ arrayRemoveElement = (ar, el)->
 	if i >= 0
 		ar.splice(i,1)
 
-#convenience function
-@attachAutocompletion = (input, matchset, matchCallback)->
-	if matchset.constructor == Array
-		matchset = new @MatchSet matchset
-	ac = new @Autocompletion matchset
+@attachAutocompletion = (input, matchsetArray, matchCallback)->
+	config = null
+	if input.constructor == Object
+		config = input
+	else
+		config = {input, matchsetArray, matchCallback}
+	config.dropdownCSSClass ||= 'autocompletion_drop'
+	config.matchingLetterCSSClass ||= 'autocompletion_matching_letter'
+	config.matchCSSClass ||= 'autocompletion_match'
+	matchset = new @MatchSet config.matchsetArray, config.matchingLetterCSSClass
+	ac = new @Autocompletion matchset, config.dropdownCSSClass, config.matchCSSClass
 	ac.attach input
-	ac.addFiringListener matchCallback if matchCallback
+	ac.addFiringListener config.matchCallback if config.matchCallback
 	ac
 
 #workhorsey
 class @Autocompletion
-	constructor: (@matchset)->
+	constructor: (@matchset, dropClass, @matchClass)->
 		@drop = document.createElement 'div'
-		@drop.classList.add 'autocompletion_drop'
+		@drop.classList.add dropClass
 		document.body.appendChild @drop
 		@dropListContainer = @drop
 		@currentResultList = []
@@ -48,7 +54,7 @@ class @Autocompletion
 			@dropListContainer.removeChild(@dropListContainer.lastChild)
 		while @dropListContainer.children.length < resultList.length
 			newResultEl = document.createElement 'div'
-			newResultEl.classList.add 'match'
+			newResultEl.classList.add @matchClass
 			@dropListContainer.appendChild newResultEl
 		#replace contents
 		for i in [0 ... resultList.length]

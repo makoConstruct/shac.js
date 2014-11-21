@@ -23,7 +23,7 @@
 			margin-left: 0px;
 			opacity: 1;
 		}
-		.match{
+		.autocompletion_match{
 			font-family: monospace;
 			background-color: rgba(0,0,0, 1);
 			margin-bottom: 4px;
@@ -31,11 +31,11 @@
 			padding-right: 3px;
 			color: rgb(178,178,178);
 		}
-		*.match + *.match {
+		*.autocompletion_match + *.autocompletion_match {
 			color: rgb(178,178,178);
 			background-color: rgba(0,0,0, 0.3);
 		}
-		.subsequence_matching{
+		.autocompletion_matching_letter{
 			font-weight: 800;
 			color: white;
 		}
@@ -91,6 +91,7 @@
 				}
 			);
 			
+			//(just puts the resultList on the page)
 			resultList.forEach(function(te){
 				var noteel = document.createElement('div');
 				noteel.classList.add('in_box_item');

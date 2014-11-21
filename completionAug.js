@@ -11,28 +11,40 @@
     }
   };
 
-  this.attachAutocompletion = function(input, matchset, matchCallback) {
-    var ac;
-    if (matchset.constructor === Array) {
-      matchset = new this.MatchSet(matchset);
+  this.attachAutocompletion = function(input, matchsetArray, matchCallback) {
+    var ac, config, matchset;
+    config = null;
+    if (input.constructor === Object) {
+      config = input;
+    } else {
+      config = {
+        input: input,
+        matchsetArray: matchsetArray,
+        matchCallback: matchCallback
+      };
     }
-    ac = new this.Autocompletion(matchset);
+    config.dropdownCSSClass || (config.dropdownCSSClass = 'autocompletion_drop');
+    config.matchingLetterCSSClass || (config.matchingLetterCSSClass = 'autocompletion_matching_letter');
+    config.matchCSSClass || (config.matchCSSClass = 'autocompletion_match');
+    matchset = new this.MatchSet(config.matchsetArray, config.matchingLetterCSSClass);
+    ac = new this.Autocompletion(matchset, config.dropdownCSSClass, config.matchCSSClass);
     ac.attach(input);
-    if (matchCallback) {
-      ac.addFiringListener(matchCallback);
+    if (config.matchCallback) {
+      ac.addFiringListener(config.matchCallback);
     }
     return ac;
   };
 
   this.Autocompletion = (function() {
-    function Autocompletion(matchset) {
+    function Autocompletion(matchset, dropClass, matchClass) {
       this.matchset = matchset;
+      this.matchClass = matchClass;
       this.keydown = __bind(this.keydown, this);
       this.onInput = __bind(this.onInput, this);
       this.collapse = __bind(this.collapse, this);
       this.deploy = __bind(this.deploy, this);
       this.drop = document.createElement('div');
-      this.drop.classList.add('autocompletion_drop');
+      this.drop.classList.add(dropClass);
       document.body.appendChild(this.drop);
       this.dropListContainer = this.drop;
       this.currentResultList = [];
@@ -67,7 +79,7 @@
       }
       while (this.dropListContainer.children.length < resultList.length) {
         newResultEl = document.createElement('div');
-        newResultEl.classList.add('match');
+        newResultEl.classList.add(this.matchClass);
         this.dropListContainer.appendChild(newResultEl);
       }
       for (i = _i = 0, _ref = resultList.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
