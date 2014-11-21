@@ -3,7 +3,8 @@
 <head>
 	<title>test autocomplete</title>
 	<meta charset="utf-8">
-	<script type="text/javascript" src="shac.js"></script>
+	<script type="text/javascript" src="CleverMatcher.js"></script>
+	<script type="text/javascript" src="completionAug.js"></script>
 	<style type="text/css">
 		/*autocomplete-specific stuff:*/
 		.autocompletion_drop{
@@ -56,6 +57,10 @@
 			padding: 13px;
 			background-color: rgb(230 ,230,230);
 		}
+		#in_box::before{
+			font-size: 10px;
+			content: 'from among';
+		}
 		.flash{
 			-webkit-animation: anflash 600ms ease-in-out;
 			-moz-animation: anflash 600ms ease-in-out;
@@ -76,7 +81,7 @@
 			var inBox = document.getElementById('in_box');
 			inputElement.focus();
 			
-			var resultList = ['Blinding Lantern Smith', 'Hopeful Woods', 'blustery_green', 'Stone Sword', 'LoathingLights', 'Empty_parrot', 'versitility', 'version', 'document32', 'orson snot lard', 'green-temple', 'ShortHand AutoCompleter', 'Laden Wind', 'Hollow Wind', ];
+			var resultList =  ['BindingLantern Smith', 'Hopeful Woods', 'blustery_green', 'Holy Sword', 'LoathsomeForge', 'Empty_parrot', 'GoldenHorn', 'Open Hail', 'aside the mail', 'versitility', 'version', 'document32', 'orson snot lard', 'green-temple', 'Vital Breath', 'Empty Breath'];
 			var ac = attachAutocompletion(
 				inputElement,
 				resultList,
@@ -84,6 +89,7 @@
 					//flash the selected item
 					inBox.children[key].classList.remove('flash');
 					setTimeout(function(){ inBox.children[key].classList.add('flash'); }, 16); //Gecko why are you so inattentive that I have to leave it removed for 16 ms for you to notice a change occurred, I shouldn't have to leave it at all. Webkit's bad too, it wont notice a change if I add the class during this function call, but at least I don't have to wait around for longer than a single yeild.
+					
 				}
 			);
 			
