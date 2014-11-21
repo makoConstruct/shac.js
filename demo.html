@@ -2,6 +2,7 @@
 <html>
 <head>
 	<title>test autocomplete</title>
+	<meta charset="utf-8">
 	<script type="text/javascript" src="CleverMatcher.js"></script>
 	<script type="text/javascript" src="completionAug.js"></script>
 	<style type="text/css">
@@ -50,7 +51,7 @@
 			border: none;
 			background-color: rgb(245,245,245);
 		}
-		#in_box{
+		/*#in_box{
 			display: inline-block;
 			border-radius: 14px;
 			padding: 13px;
@@ -71,7 +72,7 @@
 		@-moz-keyframes anflash{ 0%{ opacity: 1 } 50%{ opacity: 0 } 100%{ opacity: 1 } }
 		@-ms-keyframes anflash{ 0%{ opacity: 1 } 50%{ opacity: 0 } 100%{ opacity: 1 } }
 		@-o-keyframes anflash{ 0%{ opacity: 1 } 50%{ opacity: 0 } 100%{ opacity: 1 } }
-		@keyframes anflash{ 0%{ opacity: 1 } 50%{ opacity: 0 } 100%{ opacity: 1 } }
+		@keyframes anflash{ 0%{ opacity: 1 } 50%{ opacity: 0 } 100%{ opacity: 1 } }*/
 		
 	</style>
 	<script type="text/javascript">
@@ -80,29 +81,34 @@
 			var inBox = document.getElementById('in_box');
 			inputElement.focus();
 			
-			var resultList =  ['BindingLantern Smith', 'Hopeful Woods', 'blustery_green', 'Holy Sword', 'LoathsomeForge', 'Empty_parrot', 'GoldenHorn', 'Open Hail', 'aside the mail', 'versitility', 'version', 'document32', 'orson snot lard', 'green-temple', 'Vital Breath', 'Empty Breath'];
+			// var resultList =  ['BindingLantern Smith', 'Hopeful Woods', 'blustery_green', 'Holy Sword', 'LoathsomeForge', 'Empty_parrot', 'GoldenHorn', 'Open Hail', 'aside the mail', 'versitility', 'version', 'document32', 'orson snot lard', 'green-temple', 'Vital Breath', 'Empty Breath'];
+			var resultList = ['Albania','Algeria','Angola','Anguilla','Antarctica','Argentina','Armenia','Aruba','Australia','Austria','Azerbaijan','Belgium','Belize','Benin','Bhutan','Bouvet Island','Brazil','Bulgaria','Burundi','Cambodia','Canada','Cayman Islands','Central African Republic','Chad','Chile','Cocos (Keeling) Islands','Comoros','Cook Islands','Costa Rica','Cuba','Czech Republic','Denmark','Djibouti','Dominica','Equatorial Guinea','Eritrea','Estonia','Ethiopia','Falkland Islands (Malvinas)','Faroe Islands','Fiji','Finland','France','French Polynesia','French Southern Territories','Gabon','Georgia','Germany','Ghana','Greenland','Grenada','Guadeloupe','Guinea-bissau','Guyana','Haiti','Hong Kong','Hungary','Iran, Islamic Republic of','Iraq','Israel','Italy','Jamaica','Kenya','Kiribati','Kyrgyzstan','Lebanon','Liberia','Libyan Arab Jamahiriya','Liechtenstein','Luxembourg','Malawi','Malaysia','Maldives','Mali','Malta','Marshall Islands','Mauritania','Mexico','Micronesia','Mongolia','Morocco','Mozambique','Myanmar','Nauru','Nepal','Netherlands','New Caledonia','New Zealand','Nicaragua','Niger','Nigeria','Niue','Norfolk Island','Northern Mariana Islands','Oman','Pakistan','Palau','Paraguay','Peru','Philippines','Puerto Rico','Qatar','Reunion','Romania','Rwanda','Saint Kitts and Nevis','Saint Lucia','Saint Pierre and Miquelon','Saint Vincent and The Grenadines','Saudi Arabia','Serbia and Montenegro','Seychelles','Somalia','South Africa','South Georgia and The South Sandwich Islands','Spain','Sudan','Suriname','Svalbard and Jan Mayen','Swaziland','Switzerland','Timor-leste','Tonga','Trinidad and Tobago','Tunisia','Turkey','Turkmenistan','Tuvalu','Uganda','Ukraine','United Kingdom','United States','Uruguay','Uzbekistan','Vanuatu','Viet Nam','Virgin Islands, British','Virgin Islands, U.S.','Wallis and Futuna','Western Sahara','Yemen','Zambia'];
 			var ac = attachAutocompletion(
 				inputElement,
 				resultList,
 				function(key){
 					//flash the selected item
-					inBox.children[key].classList.remove('flash');
-					setTimeout(function(){ inBox.children[key].classList.add('flash'); }, 16); //Gecko why are you so inattentive that I have to leave it removed for 16 ms for you to notice a change occurred, I shouldn't have to leave it at all. Webkit's bad too, it wont notice a change if I add the class during this function call, but at least I don't have to wait around for longer than a single yeild.
+					// inBox.children[key].classList.remove('flash');
+					// setTimeout(function(){ inBox.children[key].classList.add('flash'); }, 16); //Gecko why are you so inattentive that I have to leave it removed for 16 ms for you to notice a change occurred, I shouldn't have to leave it at all. Webkit's bad too, it wont notice a change if I add the class during this function call, but at least I don't have to wait around for longer than a single yeild.
+					//just append a span saying so
+					var nsp = document.createElement('span');
+					nsp.textContent = 'selected #'+key+'.  ';
+					document.body.appendChild(nsp);
 				}
 			);
 			
 			//(just puts the resultList on the page)
-			resultList.forEach(function(te){
-				var noteel = document.createElement('div');
-				noteel.classList.add('in_box_item');
-				noteel.textContent = te;
-				inBox.appendChild(noteel);
-			});
+			// resultList.forEach(function(te){
+			// 	var noteel = document.createElement('div');
+			// 	noteel.classList.add('in_box_item');
+			// 	noteel.textContent = te;
+			// 	inBox.appendChild(noteel);
+			// });
 		});
 	</script>
 </head>
 <body>
-	<div id="in_box"></div>
+	<!-- <div id="in_box"></div> -->
 	<input id="input">
 </body>
 </html>

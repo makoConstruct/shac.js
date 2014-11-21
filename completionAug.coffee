@@ -5,6 +5,14 @@ arrayRemoveElement = (ar, el)->
 	i = ar.indexOf el
 	if i >= 0
 		ar.splice(i,1)
+#no IE 8
+elBounds = (el)->
+	eb = el.getBoundingClientRect()
+	x: eb.left - document.body.scrollLeft
+	y: eb.top - document.body.scrollTop
+	w: eb.width
+	h: eb.height
+
 
 @attachAutocompletion = (input, matchsetArray, matchCallback)->
 	config = null
@@ -15,18 +23,18 @@ arrayRemoveElement = (ar, el)->
 	config.dropdownCSSClass ||= 'autocompletion_drop'
 	config.matchingLetterCSSClass ||= 'autocompletion_matching_letter'
 	config.matchCSSClass ||= 'autocompletion_match'
-	matchset = new @MatchSet config.matchsetArray, config.matchingLetterCSSClass
-	ac = new @Autocompletion matchset, config.dropdownCSSClass, config.matchCSSClass
+	config.nresults ||= 10
+	config.matchset ||= new @MatchSet config.matchsetArray, config.matchingLetterCSSClass
+	ac = new @Autocompletion config.matchset, config.nresults, config.dropdownCSSClass, config.matchCSSClass
 	ac.attach input
 	ac.addFiringListener config.matchCallback if config.matchCallback
 	ac
 
 #workhorsey
 class @Autocompletion
-	constructor: (@matchset, dropClass, @matchClass)->
+	constructor: (@matchset, @nresults, dropClass, @matchClass)->
 		@drop = document.createElement 'div'
 		@drop.classList.add dropClass
-		document.body.appendChild @drop
 		@dropListContainer = @drop
 		@currentResultList = []
 		@firingListeners = []
@@ -34,6 +42,7 @@ class @Autocompletion
 	attach:(newInput)->
 		if @input
 			@detach()
+		document.body.appendChild @drop
 		@input = newInput
 		@input.addEventListener 'input', @onInput
 		@input.addEventListener 'focus', @deploy
@@ -74,14 +83,14 @@ class @Autocompletion
 			
 	deploy: =>
 		if @dropListContainer.children.length > 0
-			cr = @input.getBoundingClientRect()
-			@drop.style.left = cr.left+'px'
-			@drop.style.top = cr.bottom+'px'
+			ep = elBounds @input
+			@drop.style.left = ep.x+'px'
+			@drop.style.top = ep.y+ep.h+'px'
 			@drop.classList.add 'visible'
 	collapse: =>
 		@drop.classList.remove 'visible'
 	onInput: =>
-		res = @matchset.seek @input.value
+		res = @matchset.seek @input.value, @nresults
 		@pushToDrop(res)
 		if res.length > 0
 			@deploy()
