@@ -17,17 +17,32 @@ elBounds = (el)->
 
 #workhorsey
 class @Autocompletion
-	constructor: (input, matchsetArray, matchCallback)->
-		config =
-			if input.constructor == Object
-				input
-			else
-				{input, matchsetArray, matchCallback}
+	constructor: (args...)->
+		config = 
+			if args.length == 1
+				args[0]
+			else if args.length == 2
+				if args[0].list
+					{input:args[0], matchCallback:args[1]}
+				else
+					throw new Error('args must be formatted as: (<config> | <input with datalist>, <callback> | <input without datalist>, <data list>, <callback>)')
+			else if args.length == 3
+				{input:args[0], matchsetArray:args[1], matchCallback:args[2]}
 		@nresults = config.nresults || 10
 		@matchingLetterCSSClass = config.matchingLetterCSSClass || 'autocompletion_matching_letter'
 		@matchAllForNothing = config.matchAllForNothing || false
+		@completeImmediatelyOnExclusiveMatch = config.completeImmediatelyOnExclusiveMatch || false
+		datalist = config.input.list
+		if datalist
+			#cut out the data list so that it doesn't interfere
+			config.input.setAttribute("list", null)
+			if !config.matchsetArray
+				#assimilate a datalist and generate a matchsetArray from it.
+				li = (opt.value for opt in datalist.children)
+				config.matchsetArray = li
 		@matchset = config.matchset || matchset config.matchsetArray, @matchingLetterCSSClass, @matchAllForNothing
 		@firesOnSpace = config.firesOnSpace || false
+		@clearOnCompletion = config.clearOnCompletion || false
 		dropClass = config.dropdownCSSClass || 'autocompletion_drop'
 		@matchClass = config.matchCSSClass || 'autocompletion_match'
 		@erasesOnEscape = config.erasesOnEscape || false
@@ -83,6 +98,7 @@ class @Autocompletion
 	removeFiringListener: (callback)->
 		arrayRemoveElement(@firingListeners, callback)
 	fireFiringListeners: (keyKey)->
+		if @clearOnCompletion then @input.value = ''
 		for fl in @firingListeners
 			fl keyKey
 	fireOnFirstResult: ->
@@ -104,9 +120,9 @@ class @Autocompletion
 		@drop.classList.remove 'visible'
 	onInput: =>
 		res = @matchset.seek @input.value, @nresults
+		if @completeImmediatelyOnExclusiveMatch and res.length == 1
+			@fireOnFirstResult()
 		@pushToDrop(res)
-		if res.length > 0
-			@deploy()
 	keydown: (ev)=>
 		switch ev.keyCode
 			when 13 #return
@@ -124,4 +140,3 @@ class @Autocompletion
 				if @firesOnSpace
 					@fireOnFirstResult()
 					ev.preventDefault()
-				
