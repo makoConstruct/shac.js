@@ -1,6 +1,6 @@
 ShortHand AutoCompleter is an autocompletion UI for local datasets which is built on a [subsequence match algorithm](https://github.com/makoConstruct/CleverMatcher)(not a bog-standard substring match algo like many of you will be used to) augmented with a full appreciation for initialisms as mnemonic shorthands. This match algo will be familiar to Sublime Text users, and it'll be appreciated by any user who wants to be able to narrow in on their term with the minimum number of characters.
 
-Adding autocomplete behavior to an input is as simple as defining the style for the dropdown menu(see the css in the [demo](http://makopool.com/autocompleteDemo.html) for a nice example which you are welcome to plagiarize), then running
+Adding autocomplete behavior to an input is as simple as defining the style for the dropdown menu(see the css in the [demo](http://makopool.com/shac.js/demo.html) for a nice example which you are welcome to plagiarize), then running
 ```javascript
 attachAutocompletion(inputElement, completionCandidateArray, selectionEventCallback);
 ```
